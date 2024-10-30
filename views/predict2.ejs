@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Blog Template · Bootstrap v5.0</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/blog/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.0/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#7952b3">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      #expandable {
+        margin: 0 auto; 
+        max-width: 500px; 
+        width: 100%; /* Full width */
+        height: auto; /* Initial height */
+        overflow: visible; /* Hide overflow when collapsed */
+        transition: all 0.3s ease; /* Smooth transition */
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      h2.mb-0 {
+        white-space: nowrap; /* Prevents the text from wrapping */
+      }
+      .form-label{
+        display: block;
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .likert-scale {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+    
+      .likert-label {
+        font-weight: bold;
+      }
+    
+      .likert-input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 10px;
+      }
+    
+      .custom-radio {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 30px;
+        height: 30px;
+        margin: 0 10px;
+        border: 2px solid #6c757d;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .custom-radio:checked {
+        background-color: #5cb85c;
+        border-color: #5cb85c;
+      }
+      
+      .custom-radio:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(92, 184, 92, 0.5);
+      }
+      
+
+      .bottom-right-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .custom-select {
+      width: 100%;
+       padding: 10px;
+       font-size: 1rem;
+       border: 1px solid #ced4da;
+       border-radius: 4px;
+     }
+
+
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900&amp;display=swap" rel="stylesheet">
+    <link href="/css/blog.css" rel="stylesheet">
+    <link href="/css/mod.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+  </head>
+  <body>
+    <a href="/admin" class="btn btn-primary btn-lg bottom-right-btn"></a>
+    <div class="container mb-4">
+      <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1">
+            <% if (loggedIn) { %>
+              <a class="btn btn-sm btn-danger" href="/home">ตารางข้อมูล</a>
+            <% } %>
+          </div>
+          <div class="col-4 text-center">
+            <a class="blog-header-logo text-dark text-decoration-none" href="/">ระบบสนับสนุนการตัดสินในการการเลือกซื้อที่อยู่อาศัย</a>
+          </div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <% if (loggedIn ) { %>
+              <a class="btn btn-sm btn-danger" href="/logout">Logout</a>
+            <% } %>
+              <% if (!loggedIn) { %>
+                <div class="dropdown">
+                  <button class="dropbtn">Login</button>
+                  <div class="dropdown-content" id="user-dropdown">  
+                      <a href="/login">Login</a>
+                      <a href="/register">Register</a>
+                      <a href="/loginsale">Sale login</a>
+                  </div>
+                </div>
+            <% } %>
+        </div>
+      </header>
+    </div>
+
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12">
+          <% if (loggedIn) { %>
+            <div id="expandable" class="row g-0 border rounded mb-4 shadow-sm">
+              <div class="col p-4 d-flex flex-column">
+                <form action="/submit-survey2" method="POST" id="surveyForm">
+                  <div class="mb-3">
+                    <label for="name" class="form-label head-main">ทำนายประเภทที่อยู่อาศัย</label>
+                    <div id="page1">
+                    <label for="age" class="form-label">กรุณากรอกอายุของท่าน</label>
+                    <select name="อายุ[]" id="age" class="custom-select" >
+                      <option value="Young">23-25 ปี</option>
+                      <option value="middle age">26-30 ปี</option>
+                      <option value="middle age">31-35 ปี</option>
+                      <option value="middle age">36-50 ปี</option>
+                      <option value="Age">51-60 ปี</option>
+                    </select>
+
+                    <label for="occupation" class="form-label">กรุณากรอกอาชีพของท่าน</label>
+                    <select name="อาชีพ[]" id="occupation" class="custom-select">
+                      <option value="business">ธุรกิจส่วนตัว</option>
+                      <option value="government">ข้าราชการ</option>
+                      <option value="employee">พนักงานบริษัท</option>
+                      <option value="general employee">รับจ้างทั่วไป</option>
+                      <option value="state enterprise">รัฐวิสาหกิจ</option>
+                      <option value="seller">ค้าขาย</option>
+                      <option value="farmer">เกษตรกร</option>
+                      <option value="student">นักเรียน</option>
+                    </select>
+
+                    <label for="income" class="form-label">กรุณากรอกรายได้เฉลี่ยต่อเดือนของท่าน</label>
+                    <select name="รายได้เฉลี่ยต่อเดือน[]" id="income" class="custom-select">
+                      <option value="very low">ต่ำกว่า 12,000 บาท</option>
+                      <option value="Low">12,000 – 19,000 บาท</option>
+                      <option value="middle">20,000 – 40,000 บาท</option>
+                      <option value="high">41,000 – 70,000 บาท</option>
+                      <option value="very high">75,000 – 150,000 บาท</option>
+                      <option value="super">มากกว่า 150,000 บาท</option>
+                    </select>
+
+                    <label for="education" class="form-label">กรุณากรอกระดับการศึกษาของท่าน</label>
+                    <select name="ระดับการศึกษา[]" id="education" class="custom-select">
+                      <option value="middle school">มัธยมต้น</option>
+                      <option value="High school">มัธยมปลาย หรือเทียบเท่า</option>
+                      <option value="Vocational Certificate">ปวช.</option>
+                      <option value="Diploma">ปวส.</option>
+                      <option value="Bachelor Degrees">ปริญญาตรี หรือเทียบเท่า</option>
+                      <option value="Master Degrees">ปริญญาโท</option>
+                      <option value="Doctor Degrees">ปริญญาเอก</option>
+                    </select>
+
+                    <label for="family" class="form-label">กรุณากรอกจำนวนสมาชิกในครอบครัว (รวมตัวท่าน)</label>
+                    <select name="จำนวนสมาชิกในครอบครัว (รวมผู้ตอบแบบสอบถาม)[]" id="family" class="custom-select">
+                      <option value="low">1-2 คน</option>
+                      <option value="middle">3-4 คน</option>
+                      <option value="high">5-6 คน</option>
+                      <option value="very high">7 คนขึ้นไป</option>
+                    </select>
+
+                    <label for="residence" class="form-label">กรุณากรอกลักษณะที่อยู่อาศัยเดิมของท่าน</label>
+                    <select name="ลักษณะที่อยู่อาศัยเดิม[]" id="residence" class="custom-select">
+                      <option value="Single house">บ้านเดี่ยว</option>
+                      <option value="Townhouse">ทาวน์เฮ้าส์</option>
+                      <option value="condominium">คอนโดมีเนียม</option>
+                      <option value="commercial building">อาคารพาณิชย์</option>
+                      <option value="apartment">อพาร์ทเม้น</option>
+                      <option value="Room for rent">ห้องเช่า</option>
+                    </select>
+          
+                    <label for="q8" class="form-label">กรุณากรอกกรรมสิทธิ์การถือครองที่อยู่อาศัยเดิมของท่าน</label>
+                    <select id="q8" name="กรรมสิทธิ์การถือครองที่อยู่อาศัยเดิมเป็นรูปแบบใด" class="form-select">
+                      <option value="rent">เช่า</option>
+                      <option value="home owner1">เจ้าบ้าน(ตามทะเบียนบ้าน)</option>
+                      <option value="resident">ผู้อาศัย</option>
+                      <option value="home owner2">เจ้าของบ้าน(ผู้ถือกรรมสิทธิ์ครอบครอง)</option>
+                    </select>
+
+                    <label for="q9" class="form-label">กรุณากรอกงานอดิเรกของท่าน</label>
+                    <select id="q9" name="งานอดิเรก" class="form-select">
+                      <option value="book">อ่านหนังสือ</option>
+                      <option value="shopping">ช็อปปิ้ง</option>
+                      <option value="movie">ดูหนัง</option>
+                      <option value="music">ฟังเพลง</option>
+                      <option value="game">เล่นเกม</option>
+                      <option value="tree">ชอบปลูกต้นไม้</option>
+                    </select>
+
+                    <label for="q9" class="form-label">กรุณากรอกวัตถุประสงค์ของการซื้อที่อยู่อาศัยของท่าน</label>
+                    <select id="q9" name="วัตถุประสงค์ของการซื้อที่อยู่อาศัย" class="form-select">
+                      <option value="living">เพื่ออยู่อาศัย</option>
+                      <option value="working">เพื่อทำงาน</option>
+                      <option value="family">เพื่อขยายครอบครัว</option>
+                      <option value="legacy">เพื่อเป็นมรดก</option>
+                      <option value="benefit">เพื่อเก็งกำไร</option>
+                      <option value="rent">เพื่อปล่อยให้เช่า</option>
+                    </select>
+
+                    <label for="q10" class="form-label">กรุณากรอกงบประมาณในการซื้อที่อยู่อาศัยของท่าน</label>
+                    <select id="q10" name="งบประมาณที่ตั้งไว้ในการซื้อที่อยู่อาศัย" class="form-select">
+                      <option value="low">น้อยกว่า 1 ล้านบาท</option>
+                      <option value="middle">1 - 5 ล้านบาท</option>
+                      <option value="high">5 - 10 ล้านบาท</option>
+                      <option value="very high">มากกว่า 10 ล้านบาท</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" style="margin-top: 20px;" onclick="nextPage(1)">ถัดไป</button>
+                  </div>
+
+                  <div id="page2" style="display:none;">
+                  <label for="q11" class="form-label"> ความสะดวกสบายด้านการเดินทางส่งผลต่อการเลือกซื้อขนาดไหน</label>
+                    <div id="q11">
+                      <div class="likert-scale">
+                        <span class="likert-label text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="ความสะดวกสบายด้านการเดินทาง" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="ความสะดวกสบายด้านการเดินทาง" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="ความสะดวกสบายด้านการเดินทาง" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="ความสะดวกสบายด้านการเดินทาง" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="ความสะดวกสบายด้านการเดินทาง" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>
+                    </div>
+                       
+                  <label for="q12" class="form-label"> สภาพแวดล้อมส่งผลต่อการซื้อบ้านของท่านขนาดไหน</label>
+                    <div id="q12">
+                      <div class="likert-scale">
+                        <span class="likert-label text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="สภาพแวดล้อม" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="สภาพแวดล้อม" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="สภาพแวดล้อม" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="สภาพแวดล้อม" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="สภาพแวดล้อม" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>
+                    </div>
+
+                  <label for="q13" class="form-label">มีโปรโมชั่นแถม ส่งผลต่อการเลือกซื้อของท่านขนาดไหน</label>
+                    <div id="q13">
+                      <div class="likert-scale">
+                        <span class="likert-label text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="มีโปรโมชั่น เช่น ส่วนลดหรือของแถม" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="มีโปรโมชั่น เช่น ส่วนลดหรือของแถม" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="มีโปรโมชั่น เช่น ส่วนลดหรือของแถม" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="มีโปรโมชั่น เช่น ส่วนลดหรือของแถม" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="มีโปรโมชั่น เช่น ส่วนลดหรือของแถม" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>
+                    </div>
+
+                    <label for="q14" class="form-label">พนักงานขายให้บริการดีมีผลจ่อการซื้อบ้าของท่านขนาดไหน</label>
+                    <div id="q14">
+                      <div class="likert-scale">
+                        <span class="likert-label text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="พนักงานขายให้บริการดี" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="พนักงานขายให้บริการดี" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="พนักงานขายให้บริการดี" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="พนักงานขายให้บริการดี" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="พนักงานขายให้บริการดี" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>
+                    </div>
+
+                  <label for="q15" class="form-label">พื้นที่ตั้งของโครงการมีผลต่อการซื้อบ้านของท่านขนาดไหน</label>
+                    <div id="q15">
+                      <div class="likert-scale">
+                        <span class="likert-l abel text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="พื้นที่ตั้งของโครงการ" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="พื้นที่ตั้งของโครงการ" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="พื้นที่ตั้งของโครงการ" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="พื้นที่ตั้งของโครงการ" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="พื้นที่ตั้งของโครงการ" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>                    
+                    </div>
+
+                  <label for="q16" class="form-label">การบริการและความปลอดภัยมีผลต่อการเลือกซื้อบ้านของท่านขนาดไหน</label>
+                    <div id="q16">
+                      <div class="likert-scale">
+                        <span class="likert-label text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="การบริการและความปลอดภัย" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="การบริการและความปลอดภัย" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="การบริการและความปลอดภัย" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="การบริการและความปลอดภัย" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="การบริการและความปลอดภัย" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>
+                    </div>
+
+                  <label for="q17" class="form-label">การแบ่งพื้นที่ใช้สอยเพื่อดำเนินธุรกิจได้ ส่งผลต่อการเลือกซื้อของท่านขนาดไหน</label>
+                    <div id="q17">
+                      <div class="likert-scale">
+                        <span class="likert-label text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="สามารถแบ่งพื้นที่ใช้สอย" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="สามารถแบ่งพื้นที่ใช้สอย" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="สามารถแบ่งพื้นที่ใช้สอย" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="สามารถแบ่งพื้นที่ใช้สอย" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="สามารถแบ่งพื้นที่ใช้สอย" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>
+                    </div>
+
+                  <label for="q18" class="form-label">การซื้อแบบกู้ธนาคาร ส่งผลต่อการเลือกซื้อของท่านขนาดไหน</label>
+                    <div id="q18">
+                      <div class="likert-scale">
+                        <span class="likert-label text-success">ส่งผลมาก</span>
+                        <div class="likert-input">
+                          <input type="radio" class="custom-radio" name="การซื้อแบบกู้ธนาคาร" value="very high" id="answer1">
+                          <input type="radio" class="custom-radio" name="การซื้อแบบกู้ธนาคาร" value="high" id="answer2">
+                          <input type="radio" class="custom-radio" name="การซื้อแบบกู้ธนาคาร" value="middle" id="answer3">
+                          <input type="radio" class="custom-radio" name="การซื้อแบบกู้ธนาคาร" value="low" id="answer4">
+                          <input type="radio" class="custom-radio" name="การซื้อแบบกู้ธนาคาร" value="very low" id="answer5">
+                        </div>
+                        <span class="likert-label text-muted">ไม่ส่งผล</span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" style="margin-top: 20px;"onclick="previousPage(2)">ก่อนหน้า</button>
+                    <button type="submit" class="btn btn-primary"style="margin-top: 20px;">ทำนายการซื้อ</button>
+                  </div>
+                </div>
+                </form>
+              </div>
+
+              </div>
+            </div>
+          <% } else { %>
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative d-flex align-items-center justify-content-center">
+              <div class="col p-4 d-flex flex-column position-static text-center">
+                <h2 class="mb-0 text-center">ระบบสนับสนุนการตัดสินในการการเลือกซื้อที่อยู่อาศัย</h2>
+              </div>
+            </div>
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative d-flex align-items-center justify-content-center">
+              <iframe title="Test" width="1220" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiYTlhOWYxN2YtY2RjOS00ZTA2LWJiN2MtNjY5NTJlNGIwOGZiIiwidCI6ImYyZDMyMDA1LTZhYjYtNDA4MS1iZjlhLTc2NWVmZjg4NjVhNCIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <script>
+      function nextPage(currentPage) {
+        document.getElementById(`page${currentPage}`).style.display = 'none';
+        document.getElementById(`page${currentPage + 1}`).style.display = 'block';
+      }
+      function previousPage(currentPage) {
+        document.getElementById(`page${currentPage}`).style.display = 'none';
+        document.getElementById(`page${currentPage - 1}`).style.display = 'block';
+      }
+
+      function validateRadioGroups(groups) {
+        for (const group of groups) {
+            const radios = document.querySelectorAll(`input[name="${group}"]`);
+            let isChecked = false;
+            for (const radio of radios) {
+                if (radio.checked) {
+                    isChecked = true;
+                    break;
+                }
+            }
+            if (!isChecked) {
+                alert(`กรุณาเลือกคำตอบสำหรับคำถาม: ${group}`);
+                return false; 
+            }
+        }
+        return true; 
+    }
+    
+    document.getElementById('surveyForm').addEventListener('submit', function(event) {
+        const groupsToValidate = [
+            "ความสะดวกสบายด้านการเดินทาง", 
+            "สภาพแวดล้อม","มีโปรโมชั่น เช่น ส่วนลดหรือของแถม",
+            "พนักงานขายให้บริการดี",  "พื้นที่ตั้งของโครงการ", 
+            "การบริการและความปลอดภัย", "สามารถแบ่งพื้นที่ใช้สอย", 
+            "การซื้อแบบกู้ธนาคาร"
+        ];
+    
+        if (!validateRadioGroups(groupsToValidate)) {
+            event.preventDefault(); 
+        }
+    });
+    </script>
+  </body>
+</html>

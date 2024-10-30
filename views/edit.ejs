@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%= type %> Data</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>เปลี่ยนข้อมูล <%= type %></h1>
+        <form action="/admin/update/<%= type %>/<%= encodeURIComponent(data.email) %>" method="POST">
+            <div class="mb-3">
+                <label for="email" class="form-label">อีเมล</label>
+                <input type="email" class="form-control" id="email" name="email" value="<%= data.email %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">รหัสผ่านใหม่ (ไม่กรอกรหัสใหม่ รหัสผ่านจะคงเดิม)</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary">เปลี่ยนแปลง</button>
+            <a href="/admin?type=<%= type %>" class="btn btn-secondary">ยกเลิก</a>
+        </form>
+        
+    </div>
+</body>
+</html>

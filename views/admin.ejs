@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ผู้ดูแลระบบ</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        .bottom-right-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const type = '<%= type %>'; // Either 'users' or 'sales'
+            window.location.href = `/admin?type=${type}&query=${encodeURIComponent(query)}`; // Reload page with search query
+        }
+
+        function toggleSelectAll(checked) {
+            document.querySelectorAll('.select-item').forEach(cb => cb.checked = checked);
+        }
+
+        async function confirmDelete() {
+            const selectedIds = Array.from(document.querySelectorAll('.select-item:checked'))
+                .map(cb => cb.value);
+
+            if (selectedIds.length === 0) {
+                alert('No items selected.');
+                return;
+            }
+
+            if (confirm('ยืนยันที่จะลบข้อมูลรายการที่เลือกไหม?')) {
+                try {
+                    const response = await fetch('/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: '<%= type %>', ids: selectedIds })
+                    });
+
+                    if (response.ok) {
+                        alert('Selected items deleted.');
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete items.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred.');
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <a href="/" class="btn btn-primary btn-lg bottom-right-btn">
+        หน้าหลัก
+    </a>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">ระบบจัดการบัญชี</h1>
+
+        <div class="mb-4">
+            <a href="/admin?type=users" 
+               class="btn btn-primary <%= type === 'users' ? 'active' : '' %>">ผู้ใช้</a>
+            <a href="/admin?type=sales" 
+               class="btn btn-secondary <%= type === 'sales' ? 'active' : '' %>">พนักงาน</a>
+            <a class="btn btn-success mx-1" href="/registersale">ลงทะเบียนพนัคงาน</a>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="ค้นหาด้วยอีเมล..."
+                   value="<%= query || '' %>"> 
+            <button class="btn btn-outline-secondary" onclick="performSearch()">ค้นหา</button>
+        </div>
+
+        <% if (type === 'users') { %>
+            <h2>รายชื่ออีเมล ผู้ใช้</h2>
+            <% if (data.length > 0) { %>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onclick="toggleSelectAll(this.checked)"></th>
+                            <th>อีเมล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% data.forEach(user => { %>
+                            <tr>
+                                <td><input type="checkbox" class="select-item" value="<%= user._id %>"></td>
+                                <td><%= user.email %></td>
+                                <td>
+                                    <a href="/admin/edit/users/<%= encodeURIComponent(user.email) %>" class="btn btn-warning btn-sm">แก้ไข</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>ไม่พบอีเมลผู้ใช้.</p>
+            <% } %>
+        <% } %>
+        
+        <% if (type === 'sales') { %>
+            <h2>รายชื่ออีเมล พนักงาน</h2>
+            <% if (data.length > 0) { %>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onclick="toggleSelectAll(this.checked)"></th>
+                            <th>อีเมล</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% data.forEach(sale => { %>
+                            <tr>
+                                <td><input type="checkbox" class="select-item" value="<%= sale._id %>"></td>
+                                <td><%= sale.email %></td>
+                                <td>
+                                    <a href="/admin/edit/sales/<%= encodeURIComponent(sale.email) %>" class="btn btn-warning btn-sm">แก้ไข</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>ไม่พบอีเมลพนักงาน.</p>
+            <% } %>
+        <% } %>
+
+        <button class="btn btn-danger mt-3" onclick="confirmDelete()">ลบรายการที่เลือก</button>
+    </div>
+</body>
+</html>

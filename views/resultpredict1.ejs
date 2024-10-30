@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ผลลัพธ์ การซื้อที่อยู่อาศัยที่สนใจ</title>
+  <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="/css/styles.css" rel="stylesheet" >
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  
+  <style>
+    body {
+      overflow: hidden;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    .result-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; /* Full height of the viewport */
+      padding: 20px;
+    }
+    .result-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+    }
+    .result-message {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .can-buy {
+      color: #28a745;
+    }
+    .cannot-buy {
+      color: #dc3545;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .btn-light {
+      background-color: #e2e6ea;
+      border: none;
+      color: #333;
+      margin-right: 20px;
+    }
+
+    .gray{
+      color: #333;
+    }
+    .btn-light:hover {
+      background-color: #cfd4d9;
+    }
+    .btn-gray {
+      background-color: #d6d8db; 
+      color: #333;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div class="result-container">
+    <div class="result-card">
+      <h1 class="result-message <% if (predictionResult === 0) { %> can-buy <% } else { %> cannot-buy <% } %>">
+        <% if (predictionResult === 0) { %>
+          คุณควรซื้อที่อยู่อาศัย
+        <% } else { %>
+          คุณไม่ควรซื้อที่อยู่อาศัย
+        <% } %>
+      </h1>
+      <% if (predictionResult === 0) { %>
+        <a href="/predict2" class="btn btn-success btn-lg predict-button">
+          <i class="fas fa-home"></i> 
+          <span>พยากรณ์ประเภทที่อยู่อาศัยที่เหมาะสมกับท่าน</span>
+        </a>
+      <% } %>
+      <a href="/" class="gray mt-4">กลับหน้าหลัก</a> 
+    </div>
+  </div>
+
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": { "enable": true, "value_area": 800 }
+        },
+        "color": { "value": "#000000" },
+        "shape": { "type": "circle" },
+        "opacity": {
+          "value": 0.4,
+          "random": true
+        },
+        "size": {
+          "value": 3,
+          "random": true
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#333333",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 3,
+          "direction": "none",
+          "out_mode": "out"
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" },
+          "onclick": { "enable": true, "mode": "push" }
+        },
+        "modes": {
+          "grab": { "distance": 400 },
+          "bubble": { "distance": 400, "size": 40, "opacity": 8 },
+          "repulse": { "distance": 200 }
+        }
+      },
+      "retina_detect": true
+    });
+  </script>
+</body>
+</html>
